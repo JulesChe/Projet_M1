@@ -4,6 +4,7 @@ import { Layout } from '../components/Layout';
 import { authProvider } from '../routes/authProvider';
 import CreateRole from '../components/CreateRole';
 import UpdateRole from '../components/UpdateRole';
+import RolesList from '../components/RolesList';
 
 // Page d'accueil intégrant le composant CreateRole et react-admin
 const HomeWithCreateRole: React.FC = () => {
@@ -18,6 +19,14 @@ const HomeWithUpdateRole: React.FC = () => {
   return (
     <div className="App">
       <UpdateRole />
+    </div>
+  );
+};
+
+const HomeWithListRoles: React.FC = () => {
+  return (
+    <div className="App">
+      <RolesList />
     </div>
   );
 };
@@ -39,6 +48,11 @@ const Home: React.FC = () => (
       name="update-role"
       list={HomeWithUpdateRole}  
       options={{ label: "Modifier un rôle" }}
+    />
+            <Resource
+      name="affiche-role"
+      list={HomeWithListRoles}  
+      options={{ label: "Liste des rôles" }}
     />
   </Admin>
 );

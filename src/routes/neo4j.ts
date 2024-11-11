@@ -70,3 +70,46 @@ export async function roleExists(name: string): Promise<boolean> {
     await session.close();
   }
 }
+
+export async function deleteRole(name: string): Promise<void> {
+  const session: Session = driver.session();
+  try {
+    await session.run(
+      `
+      MATCH (r:Role {name: $name})
+      DETACH DELETE r
+      `,
+      { name }
+    );
+    console.log(`Role "${name}" deleted successfully`);
+  } catch (error) {
+    console.error('Error deleting role:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getAllRoles(): Promise<{ name: string; accesses: string[] }[]> {
+  const session: Session = driver.session();
+  try {
+    const result = await session.run(`
+      MATCH (r:Role)
+      RETURN r.name AS name, r.accesses AS accesses
+    `);
+
+    const roles = result.records.map((record) => ({
+      name: record.get('name'), // Vérifiez que la propriété "name" est correcte
+      accesses: record.get('accesses') || [], // Gère les accès non définis
+    }));
+
+    console.log(`Fetched ${roles.length} roles successfully`);
+    return roles;
+  } catch (error) {
+    console.error('Error fetching roles:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
+}
+
