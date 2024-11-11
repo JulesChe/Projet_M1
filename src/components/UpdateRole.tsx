@@ -31,13 +31,11 @@ const UpdateRole: React.FC = () => {
 
       if (result === 'Role does not exist') {
         setRoleExists(false);
-        alert("Le rôle spécifié n'existe pas. Veuillez vérifier le nom du rôle.");
         return;
       }
 
       if (result === 'Role updated successfully') {
         setRoleExists(true);
-        alert('Role updated successfully');
         setName('');
         setAccesses({ create: false, modify: false, view: false, delete: false });
       } else {
@@ -45,7 +43,6 @@ const UpdateRole: React.FC = () => {
       }
     } catch (error) {
       console.error('Error updating role:', error);
-      alert("Une erreur est survenue lors de la mise à jour du rôle.");
     }
   };
 

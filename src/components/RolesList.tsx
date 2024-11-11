@@ -49,7 +49,6 @@ const RolesList: React.FC = () => {
     try {
       await deleteRole(name); // Appel de la fonction `deleteRole`
       setRoles((prevRoles) => prevRoles.filter((role) => role.name !== name)); // Mise à jour locale
-      alert(`Le rôle "${name}" a été supprimé avec succès.`);
     } catch (err: any) {
       alert('Erreur lors de la suppression du rôle.');
       console.error(err);
