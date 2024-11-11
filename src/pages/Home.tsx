@@ -3,12 +3,21 @@ import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser } from 'react-ad
 import { Layout } from '../components/Layout';
 import { authProvider } from '../routes/authProvider';
 import CreateRole from '../components/CreateRole';
+import UpdateRole from '../components/UpdateRole';
 
 // Page d'accueil intégrant le composant CreateRole et react-admin
 const HomeWithCreateRole: React.FC = () => {
   return (
     <div className="App">
       <CreateRole />
+    </div>
+  );
+};
+
+const HomeWithUpdateRole: React.FC = () => {
+  return (
+    <div className="App">
+      <UpdateRole />
     </div>
   );
 };
@@ -25,6 +34,11 @@ const Home: React.FC = () => (
       name="create-role"
       list={HomeWithCreateRole}  
       options={{ label: "Créer un rôle" }}
+    />
+        <Resource
+      name="update-role"
+      list={HomeWithUpdateRole}  
+      options={{ label: "Modifier un rôle" }}
     />
   </Admin>
 );
