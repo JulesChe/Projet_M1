@@ -21,6 +21,18 @@ export async function createRole(name: string, accesses: string[]): Promise<void
   }
 }
 
+export async function getRoles(): Promise<{ name: string }[]> {
+  const session: Session = driver.session();
+  try {
+    const result = await session.run('MATCH (r:Role) RETURN r.name AS name');
+    return result.records.map((record) => ({ name: record.get('name') }));
+  } catch (error) {
+    console.error('Error getting role:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
+}
 
 export async function updateRole(name: string, newAccesses: string[]): Promise<string> {
   const session: Session = driver.session();
@@ -113,3 +125,44 @@ export async function getAllRoles(): Promise<{ name: string; accesses: string[] 
   }
 }
 
+export async function createUser(username: string, password: string, fullName: string, roleName: string): Promise<void> {
+  const session: Session = driver.session();
+  try {
+    await session.run(
+      'MATCH (r:Role {name: $roleName}) CREATE (u:User {username: $username, password: $password, fullName: $fullName})-[:HAS_ROLE]->(r) RETURN u',
+      { username, password, fullName, roleName }
+    );
+    console.log('User created successfully');
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getUserByUsername(username: string): Promise<any> {
+  const session: Session = driver.session();
+  try {
+    const result = await session.run(
+      'MATCH (u:User {username: $username})-[:HAS_ROLE]->(r:Role) RETURN u.username AS username, u.password AS password, u.fullName AS fullName, r.name AS role',
+      { username }
+    );
+    if (result.records.length > 0) {
+      const record = result.records[0];
+      return {
+        username: record.get('username'),
+        password: record.get('password'),
+        fullName: record.get('fullName'),
+        role: record.get('role'),
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
+}

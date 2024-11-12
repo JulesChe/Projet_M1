@@ -5,15 +5,21 @@ import { authProvider } from '../routes/authProvider';
 import CreateRole from '../components/CreateRole';
 import UpdateRole from '../components/UpdateRole';
 import RolesList from '../components/RolesList';
+import CreateUser from '../components/CreateUser';
 
-// Page d'accueil intégrant le composant CreateRole et react-admin
-const HomeWithCreateRole: React.FC = () => {
-  return (
-    <div className="App">
-      <CreateRole />
-    </div>
-  );
-};
+// Page for creating roles
+const RoleCreationPage: React.FC = () => (
+  <div className="App">
+    <CreateRole />
+  </div>
+);
+
+// Page for creating users
+const UserCreationPage: React.FC = () => (
+  <div className="App">
+    <CreateUser />
+  </div>
+);
 
 const HomeWithUpdateRole: React.FC = () => {
   return (
@@ -41,8 +47,13 @@ const Home: React.FC = () => (
     />
     <Resource
       name="create-role"
-      list={HomeWithCreateRole}  
-      options={{ label: "Créer un rôle" }}
+      list={RoleCreationPage}  
+      options={{ label: "Create Role" }}
+    />
+    <Resource
+      name="create-user"
+      list={UserCreationPage}  
+      options={{ label: "Create User" }}
     />
         <Resource
       name="update-role"
